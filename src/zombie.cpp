@@ -8,6 +8,15 @@ Zombie::Zombie(float x, float y, float spawnDelay) : sprite(zombieTexture) {
     sprite.setPosition({x, y});
 }
 
+sf::Vector2f Zombie::getPosition() const { return sprite.getPosition(); }
+int Zombie::getHealth() const { return health; }
+
+void Zombie::takeDamage(int dmg) {
+    health -= dmg;
+    if (health < 0) health = 0;
+}
+
+
 void Zombie::update(float dt, sf::Vector2f playerPos)
 {
     if (!active)

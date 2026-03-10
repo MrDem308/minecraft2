@@ -26,6 +26,14 @@ int main()
     Zombie zombie(800, 120, 5.f);
     sf::Clock clock;
 
+    sf::RectangleShape healthBarBack({200.f, 20.f});
+    healthBarBack.setFillColor(sf::Color(100, 100, 100));
+    healthBarBack.setPosition({300.f, 20.f}); // сверху экрана
+
+    sf::RectangleShape healthBarFront({200.f, 20.f});
+    healthBarFront.setFillColor(sf::Color::Red);
+    healthBarFront.setPosition({300.f, 20.f});
+
     Player player(100, 100, 28, 28);
 
     // Load a sprite to display
@@ -63,6 +71,15 @@ int main()
             }
 
             if (event->is<sf::Event::KeyPressed>()) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) {
+                    if (zombie.getHealth() > 0) {
+                        zombie.takeDamage(10); // каждый клик -10 здоровья
+                        std::cout << zombie.getHealth() << std::endl;
+                    }
+                }
+            }
+
+            if (event->is<sf::Event::KeyPressed>()) {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
                     sprite.move({0, -5});
                 }
@@ -84,6 +101,11 @@ int main()
             }
         }
         float dt = clock.restart().asSeconds();
+        zombie.update(dt, sprite.getPosition());
+
+        // обновляем босс-бар
+        float healthPercent = float(zombie.getHealth()) / 100.f;
+        healthBarFront.setSize({200.f * healthPercent, 20.f});
 
         zombie.update(dt, sprite.getPosition());
 
@@ -107,6 +129,9 @@ int main()
         if (distance < 100.f) {
             window.draw(deathText);
         }
+
+        window.draw(healthBarBack);
+        window.draw(healthBarFront);
 
         window.display();
     }
