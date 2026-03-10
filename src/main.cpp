@@ -23,7 +23,7 @@ int main()
     TileMap map(MAP_WIDTH, MAP_HEIGHT, TILE_SIZE);
     map.generate();
 
-    Zombie zombie(200, 120, 5.f);
+    Zombie zombie(800, 120, 5.f);
     sf::Clock clock;
 
     Player player(100, 100, 28, 28);
@@ -35,8 +35,14 @@ int main()
     sprite.setScale({0.5f, 0.5f});\
     sprite.setPosition({0.0f, 0.0f});
 
-    // Create a graphical text to display
     const sf::Font font("assets/minecraft-ten-font-cyrillic.ttf");
+
+    sf::Text deathText(font, "YOU DIED!");
+    deathText.setCharacterSize(50);
+    deathText.setFillColor(sf::Color::Red);
+    deathText.setPosition({100.f, 100.f}); // настраиваем на центр экрана
+
+    // Create a graphical text to display
     sf::Text text(font, "MINECRAFT 2", 50);
 
     sf::Texture dirtTexture;
@@ -48,7 +54,6 @@ int main()
     if (!grassTexture.loadFromFile("assets/grass_side_carried.png"))
         std::cout << "Failed to load grass\n";
 
-    // Start the game loop
     while (window.isOpen()) {
         // Process events
         while (const std::optional event = window.pollEvent()) {
@@ -73,7 +78,7 @@ int main()
                 }
             }
 
-            if ((sprite.getPosition().y >= 125 && sprite.getPosition().x < 320) || (sprite.getPosition().y >= 150 && sprite.getPosition().x >= 320)) {
+            if ((sprite.getPosition().y >= 125)) {
                     std::cout << "collision" << std::endl;
                     sprite.move({0,-5});
             }
@@ -82,18 +87,26 @@ int main()
 
         zombie.update(dt, sprite.getPosition());
 
-        player.applyPhysics(map);
+        sf::Vector2f playerPos = sprite.getPosition();
+        sf::Vector2f zombiePos = zombie.getPosition();
 
-            // Clear screen
-        sf::Color sky = sf::Color::Black;
+        float dx = zombiePos.x - playerPos.x;
+        float dy = zombiePos.y - playerPos.y;
+        float distance = std::sqrt(dx*dx + dy*dy);
+
+        sf::Color sky = sf::Color::Cyan;
         window.clear(sky);
 
         map.draw(window);
         player.draw(window);
         window.draw(sprite);
-        window.draw(text);
         zombie.draw(window);
+        window.draw(text);
         map.draw(window);
+
+        if (distance < 100.f) {
+            window.draw(deathText);
+        }
 
         window.display();
     }

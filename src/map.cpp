@@ -26,7 +26,7 @@ void TileMap::generate()
             if (y > height / 2)
                 map[y][x] = 1;
 
-            if (y == height / 2 && x < width / 2)
+            if (y == height / 2)
                 map[y][x] = 2;
 
             if (y > height / 2 + 3)

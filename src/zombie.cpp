@@ -1,8 +1,8 @@
 #include "zombie.h"
 #include <cmath>
 
-sf::Texture zombie("assets/zombie.png");
-Zombie::Zombie(float x, float y, float spawnDelay) : sprite(zombie) {
+sf::Texture zombieTexture("assets/zombie.png");
+Zombie::Zombie(float x, float y, float spawnDelay) : sprite(zombieTexture) {
     spawnTime = spawnDelay;
     sprite.setScale({0.5f, 0.5f});
     sprite.setPosition({x, y});

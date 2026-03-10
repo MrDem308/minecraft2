@@ -17,4 +17,8 @@ public:
 
     void update(float dt, sf::Vector2f playerPos);
     void draw(sf::RenderWindow& window);
+
+    sf::Vector2f getPosition() {
+        return sprite.getPosition();
+    }
 };
