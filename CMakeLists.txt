@@ -11,6 +11,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         src/map.h
         src/hitbox.cpp
         src/hitbox.h
+        src/zombie.h
+        src/zombie.cpp
 )
 
 # Указываем путь Homebrew к SFML

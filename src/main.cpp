@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "map.h"
 #include "player.h"
+#include "zombie.h"
 
 int main()
 {
@@ -21,6 +22,9 @@ int main()
 
     TileMap map(MAP_WIDTH, MAP_HEIGHT, TILE_SIZE);
     map.generate();
+
+    Zombie zombie(200, 120, 5.f);
+    sf::Clock clock;
 
     Player player(100, 100, 28, 28);
 
@@ -65,7 +69,6 @@ int main()
                     sprite.move({0, 5});
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-                    skin.flipHorizontally();
                     sprite.move({5, 0});
                 }
             }
@@ -75,6 +78,9 @@ int main()
                     sprite.move({0,-5});
             }
         }
+        float dt = clock.restart().asSeconds();
+
+        zombie.update(dt, sprite.getPosition());
 
         player.applyPhysics(map);
 
@@ -86,6 +92,7 @@ int main()
         player.draw(window);
         window.draw(sprite);
         window.draw(text);
+        zombie.draw(window);
         map.draw(window);
 
         window.display();
