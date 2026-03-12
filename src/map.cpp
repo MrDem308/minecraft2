@@ -23,13 +23,13 @@ void TileMap::generate()
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
 
-            if (y > height / 2)
-                map[y][x] = 1;
-
-            if (y == height / 2)
+            if (y > height / 1.5)
                 map[y][x] = 2;
 
-            if (y > height / 2 + 3)
+            if (y > height / 1.5 + 1)
+                map[y][x] = 1;
+
+            if (y > height / 1.5 + 6)
                 map[y][x] = 3;
         }
     }
