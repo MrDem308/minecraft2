@@ -49,7 +49,8 @@ int main()
     counterText.setFillColor(sf::Color::White);
     counterText.setPosition({10.f, 60.f});
 
-    sf::Text text(font, "MINECRAFT 2", 50);
+    sf::Text titleText(font, "MINECRAFT 2", 50);
+    titleText.setPosition({10.f, 0.f});
 
     sf::Texture dirtTexture;
     sf::Texture grassTexture;
@@ -88,8 +89,8 @@ int main()
 
                         float distance = std::sqrt(dx*dx + dy*dy);
 
-                        if (distance < 150.f && z->isAlive()) {
-                            z->takeDamage(20);
+                        if (distance < 160.f && z->isAlive()) {
+                            z->takeDamage(10);
                         }
 
                         if (!z->isAlive() && z->wasCounted()) {
@@ -103,7 +104,6 @@ int main()
             if (event->is<sf::Event::KeyPressed>()) {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
                     sprite.move({0, -15});
-                    std::cout << "В";
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
                     skin.flipHorizontally();
@@ -151,7 +151,7 @@ int main()
             map.draw(window);
             player.draw(window);
             window.draw(sprite);
-            window.draw(text);
+            window.draw(titleText);
             map.draw(window);
 
             for (auto& z : zombies) {
