@@ -6,12 +6,13 @@
 #include "player.h"
 #include "zombie.h"
 #include <vector>
+#include <memory>
 
 int main()
 {
-    const int TILE_SIZE = 32;
-    const int MAP_WIDTH = 60;
-    const int MAP_HEIGHT = 33;
+    constexpr int TILE_SIZE = 32;
+    constexpr int MAP_WIDTH = 60;
+    constexpr int MAP_HEIGHT = 33;
     sf::RenderWindow window(sf::VideoMode({1920, 1080}), "Minecraft 2D");
 
     TileMap map(MAP_WIDTH, MAP_HEIGHT, TILE_SIZE);
@@ -39,7 +40,7 @@ int main()
 
     const sf::Font font("assets/minecraft-ten-font-cyrillic.ttf");
 
-    sf::Text deathText(font, "GAME OVER!");
+    sf::Text deathText(font, "GaME OVER!");
     deathText.setCharacterSize(100);
     deathText.setFillColor(sf::Color::Red);
     deathText.setPosition({500.f, 400.f});
@@ -61,7 +62,7 @@ int main()
 
     bool zombieDead = false;
 
-    std::vector<Zombie> zombies;
+    std::vector<std::unique_ptr<Zombie>> zombies;
 
     sf::Clock spawnClock;
     float spawnDelay = 5.f;
@@ -82,16 +83,16 @@ int main()
 
                     for (auto& z : zombies) {
 
-                        float dx = z.getPosition().x - sprite.getPosition().x;
-                        float dy = z.getPosition().y - sprite.getPosition().y;
+                        float dx = z->getPosition().x - sprite.getPosition().x;
+                        float dy = z->getPosition().y - sprite.getPosition().y;
 
                         float distance = std::sqrt(dx*dx + dy*dy);
 
-                        if (distance < 150.f && z.isAlive()) {
-                            z.takeDamage(20);
+                        if (distance < 150.f && z->isAlive()) {
+                            z->takeDamage(20);
                         }
 
-                        if (!z.isAlive() && z.wasCounted()) {
+                        if (!z->isAlive() && z->wasCounted()) {
                             counter++;
                         }
                     }
@@ -102,6 +103,7 @@ int main()
             if (event->is<sf::Event::KeyPressed>()) {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
                     sprite.move({0, -15});
+                    std::cout << "В";
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
                     skin.flipHorizontally();
@@ -118,13 +120,13 @@ int main()
         }
         float dt = clock.restart().asSeconds();
         for (auto& z : zombies) {
-            z.update(dt, sprite.getPosition());
+            z->update(dt, sprite.getPosition());
 
-            float dx = z.getPosition().x - sprite.getPosition().x;
-            float dy = z.getPosition().y - sprite.getPosition().y;
+            float dx = z->getPosition().x - sprite.getPosition().x;
+            float dy = z->getPosition().y - sprite.getPosition().y;
             float distance = std::sqrt(dx*dx + dy*dy);
 
-            if (distance < 80.f && z.isAlive()) {
+            if (distance < 80.f && z->isAlive()) {
                 gameOver = true;
             }
         }
@@ -134,7 +136,7 @@ int main()
             float x = xDist(gen);
             float y = yDist(gen);
 
-            zombies.emplace_back(x, y);
+            zombies.emplace_back(std::make_unique<Zombie>(x, y));
 
             spawnClock.restart();
         }
@@ -153,8 +155,8 @@ int main()
             map.draw(window);
 
             for (auto& z : zombies) {
-                if (z.getHealth() > 0) {
-                    z.draw(window);
+                if (z->getHealth() > 0) {
+                    z->draw(window);
                 }
             }
 
