@@ -1,7 +1,7 @@
 #include "zombie.h"
 #include <cmath>
 
-sf::Texture zombieTexture("assets/zombie.png");;
+sf::Texture zombieTexture("/Users/mrdem308/Desktop/CLionProjects/minecraft2/assets/zombie.png");;
 Zombie::Zombie(float x, float y) : sprite(zombieTexture) {
     sprite.setScale({0.5f, 0.5f});
     sprite.setPosition({x, y});

@@ -1,0 +1,5 @@
+if(EXISTS "/Users/mrdem308/Desktop/CLionProjects/minecraft2/build/game_tests[1]_tests.cmake")
+  include("/Users/mrdem308/Desktop/CLionProjects/minecraft2/build/game_tests[1]_tests.cmake")
+else()
+  add_test(game_tests_NOT_BUILT game_tests_NOT_BUILT)
+endif()
