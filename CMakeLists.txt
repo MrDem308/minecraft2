@@ -40,11 +40,13 @@ enable_testing()
 set(SFML_LIB_DIR "${SFML_ROOT}/lib")
 
 add_executable(game_tests
+        tests/update_test.cpp
+        tests/death_test.cpp
+        tests/spawn_test.cpp
         tests/zombie_test.cpp
-        src/zombie.cpp      # только логика, без main.cpp
+        src/zombie.cpp
         src/player.cpp
         src/map.cpp
-        tests/update_test.cpp
 )
 
 target_link_directories(game_tests PRIVATE ${SFML_LIB_DIR})
@@ -55,5 +57,8 @@ target_link_libraries(game_tests
         sfml-window
         sfml-system
 )
+
 include(GoogleTest)
-gtest_discover_tests(game_tests)
+gtest_discover_tests(game_tests
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+)
