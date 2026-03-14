@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "../src/zombie.h"
 
-TEST(ZombieTest, MovesTowardsPlayer) {
+TEST(ZombieTest, Moves) {
     Zombie z(0, 0);
     sf::Vector2f playerPos(100, 0);
 
